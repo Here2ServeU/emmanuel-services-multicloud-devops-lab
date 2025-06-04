@@ -1,90 +1,108 @@
-# Emmanuel-Services DevOps Lab Project
+# Emmanuel-Services Multicloud DevOps Lab
 
-This guide is tailored for beginners and non-technical team members to help understand how to deploy and manage a web application using DevOps best practices across AWS, Azure, and GCP. The Emmanuel-Services app uses Node.js (backend) and React (frontend).
+This repository demonstrates how to architect, deploy, and manage a real-world full-stack web application using modern DevOps tools and multicloud infrastructure. It includes:
 
----
-
-## Project Overview
-
-- **Languages**: Node.js, React
-- **CI/CD Tools**: GitHub Actions, Azure DevOps
-- **Version Control**: Git, GitHub, SVN
-- **IaC Tools**: Terraform, Ansible
-- **Containerization & Orchestration**: Docker, Kubernetes (EKS, AKS, GKE)
-- **Multi-Cloud**: AWS, Azure, GCP
+- CI/CD with Jenkins
+- Containerization with Docker
+- Orchestration with Kubernetes
+- Infrastructure as Code with Helm
+- Multi-environment deployment on AWS, Azure, and GCP
 
 ---
 
-## Step-by-Step Setup Instructions
+## Project Structure
+```
+backend/
+  app.js
+  Dockerfile
+  package.json
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Here2ServeU/emmanuel-services-devops-lab.git
-cd emmanuel-services-devops-lab
+ci-cd/
+  Jenkinsfile
+
+frontend/
+  Dockerfile
+  package.json
+  public/
+    index.html
+
+helm/
+  Chart.yaml
+  values.yaml
+  templates/
+    deployment.yaml
+    service.yaml
+    k8s-ingress.yaml
+
+README.md
 ```
 
-### 2. Review the Codebase
-Explore:
-- `/frontend`: React app
-- `/backend`: Node.js app
+---
 
-### 3. Set Up GitHub Actions
-- Go to the `.github/workflows` directory.
-- Review `ci.yml` and `cd.yml`.
-- These handle build, test, and deploy steps.
+## Local Development Setup
 
-### 4. Azure DevOps CI/CD Setup
-- Navigate to Azure DevOps > Pipelines > New Pipeline.
-- Connect your GitHub repo.
-- Use the included `azure-pipelines.yml` file.
+### Prerequisites
+- Docker & Docker Compose (or Node.js/NPM)
 
-### 5. Containerization with Docker
+### Clone the Repository
 ```bash
-docker build -t emmanuel-frontend ./frontend
-docker build -t emmanuel-backend ./backend
+git clone https://github.com/your-org/emmanuel-services-multicloud-devops-lab.git
+cd emmanuel-services-multicloud-devops-lab
 ```
 
-### 6. Kubernetes Deployment
-Deploy to:
-- AWS (EKS)
-- Azure (AKS)
-- GCP (GKE)
-
-Use `kubectl apply -f k8s/` for manifests.
-
-### 7. Infrastructure as Code
-- Use `terraform/` folder for IaC.
+### Run Manually
 ```bash
-cd terraform/aws
-terraform init
-terraform apply
+# Backend
+cd backend
+npm install
+npm start
+
+# Frontend (in a separate terminal)
+cd frontend
+npm install
+npm start
 ```
 
-- Repeat for `azure` and `gcp` folders.
+- Frontend available at: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
 
-### 8. Configuration Management with Ansible
+---
+
+## CI/CD with Jenkins
+
+Jenkins pipeline is defined in `ci-cd/Jenkinsfile` and includes:
+- Code checkout
+- Build & test for both frontend and backend
+- Helm-based deployment to Kubernetes clusters in AWS, Azure, and GCP
+
+---
+
+## Production Deployment
+
+### Prerequisites
+- Kubernetes Cluster (EKS, AKS, or GKE)
+- Helm & kubectl CLI tools installed
+
+### Deploy with Helm
 ```bash
-ansible-playbook -i inventory site.yml
+helm upgrade --install emmanuel-services ./helm --namespace production --create-namespace
 ```
 
-### 9. Security Practices
-- Enable branch protection on GitHub
-- Use `.env` and GitHub Secrets
-- Rotate credentials regularly
+### Customize Your Deployment
+- Modify values in `helm/values.yaml`
+- Add secrets using `templates/secrets.yaml`
+- Configure ingress through `templates/k8s-ingress.yaml`
 
 ---
 
 ## Cleanup
 ```bash
-terraform destroy
-docker system prune -a
+# Stop Docker containers (if applicable)
+docker-compose down
+
+# Remove Helm release
+helm uninstall emmanuel-services --namespace production
 ```
-
----
-
-## Support
-If stuck, contact the DevOps team via Slack or email.
-
 
 ---
 
@@ -92,6 +110,8 @@ If stuck, contact the DevOps team via Slack or email.
 
 MIT License  
 © 2025 Emmanuel Naweji
+
+---
 
 ![AWS Certified](https://img.shields.io/badge/AWS-Certified-blue?logo=amazonaws)
 ![Azure Solutions Architect](https://img.shields.io/badge/Azure-Solutions%20Architect-0078D4?logo=microsoftazure)
@@ -106,3 +126,4 @@ MIT License
 ![Linux](https://img.shields.io/badge/OS-Linux-black?logo=linux)
 ![FinOps](https://img.shields.io/badge/FinOps-Cost%20Optimization-green?logo=money)
 ![OpenAI](https://img.shields.io/badge/AI-OpenAI-ff9900?logo=openai)
+

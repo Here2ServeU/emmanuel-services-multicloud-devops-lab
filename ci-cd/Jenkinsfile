@@ -1,0 +1,52 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_REGION = 'us-east-1'
+    AZURE_RESOURCE_GROUP = 'devops-rg'
+    GCP_PROJECT = 'gcp-devops-project'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Install Dependencies') {
+      steps {
+        sh 'cd frontend && npm install'
+        sh 'cd backend && npm install'
+      }
+    }
+
+    stage('Build and Test') {
+      steps {
+        sh 'cd frontend && npm run build && npm test'
+        sh 'cd backend && npm run build && npm test'
+      }
+    }
+
+    stage('Deploy to EKS') {
+      steps {
+        sh 'kubectl config use-context arn:aws:eks:us-east-1:123456789012:cluster/emmanuel-eks'
+        sh 'helm upgrade --install emmanuel-services ./helm --namespace production'
+      }
+    }
+
+    stage('Deploy to AKS') {
+      steps {
+        sh 'az aks get-credentials --resource-group $AZURE_RESOURCE_GROUP --name emmanuel-aks'
+        sh 'helm upgrade --install emmanuel-services ./helm --namespace production'
+      }
+    }
+
+    stage('Deploy to GKE') {
+      steps {
+        sh 'gcloud container clusters get-credentials emmanuel-gke --region us-central1 --project $GCP_PROJECT'
+        sh 'helm upgrade --install emmanuel-services ./helm --namespace production'
+      }
+    }
+  }
+}

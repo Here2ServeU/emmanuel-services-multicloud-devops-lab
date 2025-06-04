@@ -1,0 +1,14 @@
+// File: backend/package.json
+{
+  "name": "emmanuel-backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "build": "echo 'No build step for backend'",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

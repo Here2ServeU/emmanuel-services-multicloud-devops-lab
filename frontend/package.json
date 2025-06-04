@@ -1,0 +1,14 @@
+// File: frontend/package.json
+{
+  "name": "emmanuel-frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve -s public",
+    "build": "echo 'No build step for static HTML app'",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}
